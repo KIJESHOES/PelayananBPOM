@@ -11,7 +11,7 @@ class PetugasSeeder extends Seeder
 {
     public function run(): void
     {
-        $Petugas = [
+        $petugas = [
             'Yuniartika Berliani',
             'Eva Nikastri',
             'Krisna Ayu',
@@ -29,8 +29,9 @@ class PetugasSeeder extends Seeder
             'Lainnya',
         ];
 
-        foreach ($Petugas as $nama) {
-            Petugas::Create(['nama_petugas' => $nama]);
+
+        foreach ($petugas as $name) {
+            Petugas::updateOrCreate(['nama_petugas' => $name], ['nama_petugas' => $name]);
         }
     }
 }

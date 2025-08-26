@@ -2,19 +2,21 @@
 
 namespace Database\Seeders;
 
+use App\Models\JenisUsaha\Komoditas;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class KomoditasSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+        public function run(): void
     {
-        $nama_loket = [
+        $komoditas = [
             "Kantor Utama Balai POM Bogor",
             "MPP Kabupaten Bogor"
         ];
+
+        foreach ($komoditas as $nama) {
+            Komoditas::create(['nama_komoditas' => $nama]);
+        }
     }
 }
