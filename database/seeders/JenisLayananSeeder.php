@@ -11,8 +11,13 @@ class JenisLayananSeeder extends Seeder
     public function run(): void
     {
         $jenislayanans = [
-            "Kantor Utama Balai POM Bogor",
-            "MPP Kabupaten Bogor"
+            "Informasi Obat dan Makanan dan Pengaduan Masyarakat",
+            "Sertifikasi CDOB",
+            "Persetujuan Denah PBF",
+            "Sertifikasi CPOTB secara Bertahap",
+            "Sertifikasi SPA CPKB",
+            "⁠Penerbitan Rekomendasi sebagai Pemohon Notifikasi Kosmetik",
+            "Penerbitan Izin Penerapan CPPOB"
         ];
 
         foreach ($jenislayanans as $nama) {
