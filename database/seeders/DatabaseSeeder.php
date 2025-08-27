@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             KomoditasSeeder::class,
             LoketSeeder::class,
             PetugasSeeder::class,
+            KonsultasiSeeder::class,
         ]);
     }
 }

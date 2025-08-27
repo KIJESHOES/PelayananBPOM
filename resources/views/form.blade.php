@@ -1,5 +1,5 @@
 {{-- filepath: c:\xampp\htdocs\coba\resources\views\beranda.blade.php --}}
-@extends('user.layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Formulir Permohonan Konsultasi - BPOM Bogor')
 

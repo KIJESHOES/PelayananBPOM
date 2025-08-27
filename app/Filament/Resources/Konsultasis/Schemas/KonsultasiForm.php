@@ -40,8 +40,8 @@ class KonsultasiForm
 
                 Forms\Components\DatePicker::make('tanggal_konsultasi')->required(),
                 Forms\Components\TextInput::make('perihal'),
-                Forms\Components\Textarea::make('catatan'),
-                Forms\Components\Textarea::make('catatan_tindak_lanjut'),
+                Forms\Components\Textarea::make('catatan_konsultasi'),
+                Forms\Components\Textarea::make('tindak_lanjut'),
             ]);
     }
 }

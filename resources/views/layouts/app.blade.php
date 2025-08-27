@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>@yield('title')</title>
-    @include('user.partials.head') {{-- Bisa berisi link CSS, meta tag, dll --}}
+    @include('partials.head') {{-- Bisa berisi link CSS, meta tag, dll --}}
 </head>
 <body>
 
@@ -12,6 +12,6 @@
         @yield('content') {{-- Isi konten utama tiap halaman --}}
     </main>
 
-    @include('user.partials.scripts') {{-- JS scripts --}}
+    @include('partials.scripts') {{-- JS scripts --}}
 </body>
 </html>

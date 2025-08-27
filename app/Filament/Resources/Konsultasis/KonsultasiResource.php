@@ -19,6 +19,14 @@ class KonsultasiResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
+    protected static ?string $slug = 'konsultasi';
+
+    protected static ?string $navigationLabel = 'Permohonan Konsultasi';
+    
+    protected static ?string $pluralLabel = 'Permohonan Konsultasi'; // untuk tabel/index
+    
+    protected static ?string $modelLabel = 'Permohonan Konsultasi';  // untuk form/edit view
+    
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedChatBubbleLeftRight;
 
     protected static ?string $recordTitleAttribute = 'title';
@@ -40,21 +48,11 @@ class KonsultasiResource extends Resource
         ];
     }
 
-        public static function getNavigationLabel(): string
-    {
-        return 'Permohonan Konsultasi';
-    }
-
-     public static function getLabel(): string
-    {
-        return 'Permohonan Konsultasi'; // 👈 ini buat judul halaman create/edit
-    }
-
     public static function getPages(): array
     {
         return [
             'index' => ListKonsultasis::route('/'),
-            'ezzzzzzzzzzzdit' => EditKonsultasi::route('/{record}/edit'),
+            'edit' => EditKonsultasi::route('/{record}/edit'),
         ];
     }
 }

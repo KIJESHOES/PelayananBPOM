@@ -35,7 +35,6 @@ return new class extends Migration
 
             // tindak lanjut oleh admin
             $table->text('tindak_lanjut')->nullable();
-            $table->enum('status', ['pending', 'proses', 'selesai', 'ditolak'])->default('pending');
 
             $table->timestamps();
         });
