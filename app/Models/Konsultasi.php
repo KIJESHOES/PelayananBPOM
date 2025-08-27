@@ -22,8 +22,9 @@ class Konsultasi extends Model
         'petugas_id',
         'tanggal_konsultasi',
         'perihal',
-        'catatan',
-        'catatan_tindak_lanjut',
+        'catatan_konsultasi',
+        'tindak_lanjut',
+        'status',    
     ];
 
     protected static function booted()

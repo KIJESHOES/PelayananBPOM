@@ -32,6 +32,7 @@ return new class extends Migration
             $table->timestamp('tanggal_konsultasi')->nullable();
             $table->string('perihal')->nullable();
             $table->text('catatan_konsultasi')->nullable();
+            $table->enum('status', ['pending', 'terkirim', 'gagal'])->default('pending');
 
             // tindak lanjut oleh admin
             $table->text('tindak_lanjut')->nullable();

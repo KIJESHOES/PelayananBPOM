@@ -21,7 +21,8 @@ class KonsultasisTable
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('nama')->label('Nama')->searchable(),
-                Tables\Columns\TextColumn::make('email')->label('Email'),
+                Tables\Columns\TextColumn::make('email')->label('Email')->limit(50)
+                    ->wrap(),
                 Tables\Columns\TextColumn::make('loket.nama_loket')->label('Loket')->limit(50)
                     ->wrap(),
                 Tables\Columns\TextColumn::make('komoditas.nama_komoditas')->label('Komoditas')->limit(50)
@@ -42,6 +43,21 @@ class KonsultasisTable
                     ->label('Tanggal Konsultasi')
                     ->dateTime('d M Y H:i') // tampilkan tanggal + jam
                     ->sortable(),
+                Tables\Columns\TextColumn::make('status')
+                    ->label('Status')
+                    ->formatStateUsing(function ($state) {
+                        return match ($state) {
+                            'pending' => 'Pending',
+                            'terkirim' => 'Terkirim',
+                            'gagal' => 'Gagal',
+                            default => $state,
+                        };
+                    })
+                    ->colors([
+                        'warning' => fn($state) => $state === 'pending',
+                        'success' => fn($state) => $state === 'terkirim',
+                        'danger' => fn($state) => $state === 'gagal',
+                    ])
             ])
             ->filters([
                 //
@@ -52,9 +68,17 @@ class KonsultasisTable
                     ->label('Kirim PDF')
                     ->icon('heroicon-o-paper-airplane')
                     ->requiresConfirmation()
-                    ->action(function ($record) {
-                        $pdf = Pdf::loadView('pdf.konsultasi', ['konsultasi' => $record])->output();
-                        Mail::to($record->email)->send(new KonsultasiMail($record, $pdf));
+                    ->action(function ($record, $livewire) {
+                        try {
+                            $pdf = Pdf::loadView('pdf.konsultasi', ['konsultasi' => $record])->output();
+                            Mail::to($record->email)->send(new \App\Mail\KonsultasiMail($record, $pdf));
+                            $record->update(['status' => 'terkirim']);
+                        } catch (\Exception $e) {
+                            $record->update(['status' => 'gagal']);
+                        }
+                    })
+                    ->after(function ($record, $livewire) {
+                        $livewire->refreshTable(); // <<< ini bikin table reload otomatis
                     })
                     ->color('success'),
                 DeleteAction::make(),
