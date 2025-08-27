@@ -8,8 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class JenisLayanan extends Model
 {
     use HasFactory;
-    protected $table = 'jenis_layanan';
+
     protected $fillable = [
         'nama_layanan',
     ];
+
+    public function konsultasis()
+    {
+        return $this->hasMany(Konsultasi::class);
+    }
 }

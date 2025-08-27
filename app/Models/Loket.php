@@ -2,13 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
 class Loket extends Model
 {
     use HasFactory;
-    Protected $table = 'loket';
-    Protected $fillable = [
+
+    protected $fillable = [
         'nama_loket',
     ];
+
+    public function konsultasis()
+    {
+        return $this->hasMany(Konsultasi::class);
+    }
 }

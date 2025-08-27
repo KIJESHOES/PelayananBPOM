@@ -2,21 +2,20 @@
 
 namespace Database\Seeders;
 
-use App\Models\JenisUsaha\Komoditas;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class KomoditasSeeder extends Seeder
 {
-        public function run(): void
+    public function run(): void
     {
-        $komoditas = [
-            "Kantor Utama Balai POM Bogor",
-            "MPP Kabupaten Bogor"
-        ];
-
-        foreach ($komoditas as $nama) {
-            Komoditas::create(['nama_komoditas' => $nama]);
-        }
+        DB::table('komoditas')->insert([
+            ['nama_komoditas' => 'Pangan Olahan'],
+            ['nama_komoditas' => 'Obat Bahan Alam'],
+            ['nama_komoditas' => 'Obat'],
+            ['nama_komoditas' => 'Suplemen Kesehatan'],
+            ['nama_komoditas' => 'Kosmetik'],
+            ['nama_komoditas' => 'Umum'],
+        ]);
     }
 }

@@ -2,21 +2,16 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Loket;
+use Illuminate\Support\Facades\DB;
 
 class LoketSeeder extends Seeder
 {
     public function run(): void
     {
-        $lokets = [
-            "Kantor Utama Balai POM Bogor",
-            "MPP Kabupaten Bogor"
-        ];
-
-        foreach ($lokets as $nama) {
-            Loket::create(['nama_loket' => $nama]);
-        }
+        DB::table('lokets')->insert([
+            ['nama_loket' => 'Kantor Utama Balai POM Bogor'],
+            ['nama_loket' => 'MPP Kabupaten Bogor'],
+        ]);
     }
 }

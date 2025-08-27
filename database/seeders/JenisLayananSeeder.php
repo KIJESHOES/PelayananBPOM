@@ -2,26 +2,21 @@
 
 namespace Database\Seeders;
 
-use App\Models\JenisLayanan;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class JenisLayananSeeder extends Seeder
 {
     public function run(): void
     {
-        $jenislayanans = [
-            "Informasi Obat dan Makanan dan Pengaduan Masyarakat",
-            "Sertifikasi CDOB",
-            "Persetujuan Denah PBF",
-            "Sertifikasi CPOTB secara Bertahap",
-            "Sertifikasi SPA CPKB",
-            "⁠Penerbitan Rekomendasi sebagai Pemohon Notifikasi Kosmetik",
-            "Penerbitan Izin Penerapan CPPOB"
-        ];
-
-        foreach ($jenislayanans as $nama) {
-            JenisLayanan::create(['nama_layanan' => $nama]);
-        }
+        DB::table('jenis_layanans')->insert([
+            ['nama_layanan' => 'Informasi Obat dan Makanan dan Pengaduan Masyarakat'],
+            ['nama_layanan' => 'Sertifikasi CDOB'],
+            ['nama_layanan' => 'Persetujuan Denah PBF'],
+            ['nama_layanan' => 'Sertifikasi CPOTB secara Bertahap'],
+            ['nama_layanan' => 'Sertifikasi SPA CPKB'],
+            ['nama_layanan' => 'Penerbitan Rekomendasi sebagai Pemohon Notifikasi Kosmetik'],
+            ['nama_layanan' => 'Penerbitan Izin Penerapan CPPOB'],
+        ]);
     }
 }
