@@ -4,6 +4,8 @@ namespace App\Filament\Resources\Konsultasis\Schemas;
 
 use Filament\Schemas\Schema;
 use Filament\Forms;
+use Closure;
+
 
 class KonsultasiForm
 {
@@ -36,7 +38,14 @@ class KonsultasiForm
                     ->relationship('petugas', 'nama_petugas')
                     ->label('Petugas')
                     ->searchable()
-                    ->required(),
+                    ->required(fn($get) => !$get('nama_petugas_manual')) // wajib kalau manual kosong
+                    ->visible(fn($get) => !$get('nama_petugas_manual')), // sembunyikan jika manual diisi
+
+                Forms\Components\TextInput::make('nama_petugas_manual')
+                    ->label('Nama Petugas Lainnya')
+                    ->required(fn($get) => !$get('petugas_id')) // wajib kalau master kosong
+                    ->placeholder('Isi jika tidak memilih petugas dari master')
+                    ->visible(fn($get) => !$get('petugas_id')), // sembunyikan jika master dipilih
 
                 Forms\Components\DatePicker::make('tanggal_konsultasi')->required(),
                 Forms\Components\TextInput::make('perihal'),

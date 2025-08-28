@@ -13,16 +13,21 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use App\Enums\NavigationGroup;
 
 class KomoditasResource extends Resource
 {
     protected static ?string $model = Komoditas::class;
 
+    protected static string|\UnitEnum|null $navigationGroup = NavigationGroup::MasterData;
+
     protected static ?int $navigationSort = 2;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedArchiveBox;
 
-    protected static ?string $recordTitleAttribute = 'title';
+    protected static ?string $recordTitleAttribute = 'nama_komoditas';
+
+    protected static ?string $navigationLabel = 'Komoditas';
 
     public static function form(Schema $schema): Schema
     {
@@ -39,6 +44,16 @@ class KomoditasResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) Komoditas::count(); // total semua petugas
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'info'; // warna biru, bisa: primary, success, warning, danger, info
     }
 
     public static function getPages(): array

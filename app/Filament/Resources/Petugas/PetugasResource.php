@@ -13,16 +13,22 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use App\Enums\NavigationGroup;
 
 class PetugasResource extends Resource
 {
     protected static ?string $model = Petugas::class;
 
-    protected static ?int $navigationSort = 5;
+    protected static string|\UnitEnum|null $navigationGroup = NavigationGroup::MasterData;
+
+    protected static ?int $navigationSort = 1;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserGroup;
 
-    protected static ?string $recordTitleAttribute = 'title';
+
+    protected static ?string $recordTitleAttribute = 'nama_petugas';
+
+    protected static ?string $navigationLabel = 'Petugas';
 
     public static function form(Schema $schema): Schema
     {
@@ -39,6 +45,16 @@ class PetugasResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) Petugas::count(); // total semua petugas
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'info'; // warna biru, bisa: primary, success, warning, danger, info
     }
 
     public static function getPages(): array

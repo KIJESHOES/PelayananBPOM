@@ -12,10 +12,13 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use App\Enums\NavigationGroup;
 
 class KonsultasiResource extends Resource
 {
     protected static ?string $model = Konsultasi::class;
+
+    protected static string|\UnitEnum|null $navigationGroup = NavigationGroup::Layanan;
 
     protected static ?int $navigationSort = 1;
 
@@ -29,7 +32,7 @@ class KonsultasiResource extends Resource
     
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedChatBubbleLeftRight;
 
-    protected static ?string $recordTitleAttribute = 'title';
+    protected static ?string $recordTitleAttribute = 'nama';
 
     public static function form(Schema $schema): Schema
     {
@@ -46,6 +49,16 @@ class KonsultasiResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) Konsultasi::count(); // total semua petugas
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'info'; // warna biru, bisa: primary, success, warning, danger, info
     }
 
     public static function getPages(): array

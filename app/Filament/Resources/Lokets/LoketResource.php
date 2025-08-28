@@ -13,16 +13,21 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use App\Enums\NavigationGroup;
 
 class LoketResource extends Resource
 {
     protected static ?string $model = Loket::class;
 
-    protected static ?int $navigationSort = 4;
+    protected static string|\UnitEnum|null $navigationGroup = NavigationGroup::Layanan;
+
+    protected static ?int $navigationSort = 3;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMapPin;
 
-    protected static ?string $recordTitleAttribute = 'title';
+    protected static ?string $recordTitleAttribute = 'nama_loket';
+
+    protected static ?string $navigationLabel = 'Loket';
 
     public static function form(Schema $schema): Schema
     {
@@ -44,6 +49,16 @@ class LoketResource extends Resource
     public static function getPluralLabel(): string
     {
         return 'Loket'; // 👈 ini buat judul halaman list
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) Loket::count(); // total semua petugas
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'info'; // warna biru, bisa: primary, success, warning, danger, info
     }
 
     public static function getPages(): array
