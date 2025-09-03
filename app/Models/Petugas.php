@@ -11,7 +11,16 @@ class Petugas extends Model
 
     protected $fillable = [
         'nama_petugas',
+        'tanda_tangan_upload',
     ];
+
+    // Accessor untuk tanda tangan aktif
+    protected $appends = ['tanda_tangan_aktif'];
+
+    public function getTandaTanganAktifAttribute()
+    {
+        return $this->tanda_tangan_upload;
+    }
 
     public function konsultasis()
     {

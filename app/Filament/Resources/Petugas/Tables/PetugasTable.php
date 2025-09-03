@@ -7,6 +7,10 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Table;
 use Filament\Tables;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\Action;
+use Filament\Tables\Enums\RecordActionsPosition;
 
 class PetugasTable
 {
@@ -15,13 +19,40 @@ class PetugasTable
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('nama_petugas')->label('Nama Petugas')->searchable(),
+                Tables\Columns\ImageColumn::make('tanda_tangan_upload')
+                    ->label('TTD')
+                    ->circular(false)
+                    ->extraAttributes([
+                        'class' => 'w-20 h-10 cursor-pointer', // width & height kecil
+                    ])
+                    ->url(fn($record) => $record->tanda_tangan_upload ? asset('storage/' . $record->tanda_tangan_upload) : null)
+                    ->openUrlInNewTab(), // klik thumbnail buka di tab baru
             ])
             ->filters([
                 //
             ])
             ->recordActions([
-                EditAction::make(),
+                ActionGroup::make([
+                    EditAction::make(),
+
+                    Action::make('download_ttd')
+                        ->label('Unduh TTD')
+                        ->icon('heroicon-o-arrow-down-tray')
+                        ->url(fn($record) => $record->tanda_tangan_upload
+                            ? asset('storage/' . $record->tanda_tangan_upload)
+                            : null)
+                        ->visible(fn($record) => filled($record->tanda_tangan_upload))
+                        ->openUrlInNewTab(),
+
+
+                    DeleteAction::make()->label('Hapus'),
+                ])
+                    ->label('Aksi')
+                    ->button()
+                    ->size('sm')
+                    ->color('gray'),
             ])
+            ->recordActionsPosition(RecordActionsPosition::BeforeColumns)
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),

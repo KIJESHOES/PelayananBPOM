@@ -22,4 +22,9 @@ class EditPetugas extends EditRecord
     {
         return $this->getResource()::getUrl('index');
     }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                protected function getCancelButtonUrl(): string
+    {
+        return $this->getResource()::getUrl('index'); // kembali ke list Petugas
+    }
 }

@@ -20,7 +20,7 @@ class KonsultasiSeeder extends Seeder
         DB::table('konsultasis')->insert([
             [
                 'nama' => 'Fikri Saputra',
-                'email' => 'fikri@example.com',
+                'email' => 'saputramuhamad2911@gmail.com',
                 'no_hp' => '08123456789',
                 'instansi' => 'Universitas ABC',
                 'alamat' => 'Jl. Contoh No. 1',
@@ -41,7 +41,7 @@ class KonsultasiSeeder extends Seeder
             ],
             [
                 'nama' => 'Dewi Lestari',
-                'email' => 'dewi@example.com',
+                'email' => 'saputramuhamad2911@gmail.com',
                 'no_hp' => '08987654321',
                 'instansi' => 'PT. Contoh',
                 'alamat' => 'Jl. Contoh No. 2',
@@ -52,7 +52,7 @@ class KonsultasiSeeder extends Seeder
                 'petugas_id' => null,
                 'nama_petugas_manual' => 'Budi Santoso',
 
-                'tanggal_konsultasi' => Carbon::now()->subDays(1),
+                'tanggal_konsultasi' => Carbon::now(),
                 'perihal' => 'Konsultasi Produk Baru',
                 'catatan_konsultasi' => 'Menanyakan regulasi dan syarat pemasaran.',
 

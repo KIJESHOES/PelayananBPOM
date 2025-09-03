@@ -82,11 +82,24 @@ class KonsultasisTable
                         ->requiresConfirmation()
                         ->hidden(
                             fn($record) =>
-                            \Carbon\Carbon::parse($record->tanggal_konsultasi)->addHours(12)->isPast()
-                            || $record->status !== 'pending'
+                            // Sembunyikan kalau status bukan pending
+                            $record->status !== 'pending'
+                            // atau sudah lewat 12 jam
+                            || \Carbon\Carbon::parse($record->tanggal_konsultasi)->addHours(12)->isPast()
                         )
                         ->action(function ($record) {
                             try {
+                                // ✅ Cek kalau sudah lewat 12 jam dan status masih pending
+                                if (
+                                    \Carbon\Carbon::parse($record->tanggal_konsultasi)->addHours(12)->isPast()
+                                    && $record->status === 'pending'
+                                ) {
+                                    $record->status = 'gagal';
+                                    $record->save();
+                                    return;
+                                }
+
+                                // ✅ Kalau masih valid → generate PDF dan kirim email
                                 $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.konsultasi', [
                                     'konsultasi' => $record,
                                 ])->output();
@@ -101,6 +114,7 @@ class KonsultasisTable
                                 $record->save();
                             }
                         }),
+
 
                     Action::make('downloadPdf')
                         ->label('Download PDF')

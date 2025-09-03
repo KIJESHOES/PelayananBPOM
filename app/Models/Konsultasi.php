@@ -39,6 +39,10 @@ class Konsultasi extends Model
         });
     }
 
+    protected $casts = [
+        'tanggal_konsultasi' => 'datetime',
+    ];
+
     public function loket()
     {
         return $this->belongsTo(Loket::class);
