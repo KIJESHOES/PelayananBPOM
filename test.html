@@ -1,299 +1,207 @@
-<!DOCTYPE html>
-<html lang="en">
+{{-- filepath: resources/views/form.blade.php --}}
+@extends('layouts.app')
 
-<head>
-    <meta charset="utf-8" />
-    <title>MultiForm | Tailwind CSS form Page</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+@section('title', 'Formulir Permohonan Konsultasi - BPOM Bogor')
 
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+@section('content')
+    <div class="flex items-center justify-center p-4 sm:p-12">
+        <div class="w-full max-w-2xl rounded-lg bg-white p-6 shadow-lg sm:p-10">
+            <img src="{{ asset('assets/img/contact.png') }}" alt="Survey Form Illustration" class="w-64 h-auto mx-auto" />
 
-    <!-- Tabler Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
-</head>
+            {{-- Pesan sukses --}}
+            @if (session('success'))
+                <div class="mb-4 p-3 bg-green-100 text-green-700 rounded">
+                    {{ session('success') }}
+                </div>
+            @endif
 
-<body class="bg-gray-50">
-    <section class="py-20 px-4 lg:h-screen flex items-center justify-center">
-        <div class="container">
-            <div class="max-w-3xl mx-auto rounded-xl border border-gray-200 overflow-hidden">
-                <div class="bg-white p-6">
-                    <img src="assets/images/logo-dark.png" class="h-6" alt="" />
+            {{-- Tampilkan error validasi --}}
+            @if ($errors->any())
+                <div class="mb-4 p-3 bg-red-100 text-red-700 rounded">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <form action="{{ route('konsultasi.store') }}" method="POST" id="wizardForm">
+                @csrf
+
+                <!-- Progress -->
+                <div class="flex items-center justify-between mb-8">
+                    <div id="step1Indicator" class="flex-1 text-center font-medium text-indigo-600">1. Data Diri</div>
+                    <div class="flex-1 border-t border-gray-300 mx-2"></div>
+                    <div id="step2Indicator" class="flex-1 text-center text-gray-400">2. Detail Konsultasi</div>
                 </div>
 
-                <form id="wizardForm">
-                    <div class="bg-white space-y-6">
-                        <!-- SLIDE 1: Data Diri -->
-                        <div id="slide-1" class="slide">
-                            <div class="grid md:grid-cols-5 grid-cols-1 gap-6 md:px-10 px-6 items-center">
-                                <div class="md:col-span-2">
-                                    <h2 class="font-semibold text-gray-700">
-                                        Data Diri
-                                    </h2>
-                                </div>
-                                <!-- Nama -->
-                                <div class="md:col-span-3">
-                                    <div>
-                                        <label class="text-sm font-medium text-gray-600 block mb-2">Nama</label>
-                                        <div class="w-full inline-flex border border-gray-200">
-                                            <div class="w-12 pt-2 text-center bg-gray-100">
-                                                <i class="ti ti-user text-xl"></i>
-                                            </div>
-                                            <input type="text" name="nama"
-                                                class="w-full border-0 focus:outline-none focus:text-gray-600 focus:border-gray-200 focus:ring-gray-200 p-2"
-                                                placeholder="Nama Lengkap" required />
-                                        </div>
-                                    </div>
-                                </div>
+                <!-- Step 1 -->
+                <div id="step1" class="space-y-6">
+                    <h2 class="text-xl font-semibold text-gray-800">Data Diri & Instansi</h2>
 
-                                <!-- Email -->
-                                <div class="md:col-span-3">
-                                    <div>
-                                        <label class="text-sm font-medium text-gray-600 block mb-2">Email</label>
-                                        <div class="w-full inline-flex border border-gray-200">
-                                            <div class="w-12 pt-2 text-center bg-gray-100">
-                                                <i class="ti ti-mail text-xl"></i>
-                                            </div>
-                                            <input type="email" name="email"
-                                                class="w-full border-0 focus:outline-none focus:text-gray-600 focus:border-gray-200 focus:ring-gray-200 p-2"
-                                                placeholder="email@example.com" required />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Nomor HP -->
-                                <div class="md:col-span-3">
-                                    <div>
-                                        <label class="text-sm font-medium text-gray-600 block mb-2">Nomor HP</label>
-                                        <div class="w-full inline-flex border border-gray-200">
-                                            <div class="w-12 pt-2 text-center bg-gray-100">
-                                                <i class="ti ti-phone text-xl"></i>
-                                            </div>
-                                            <input type="text" name="no_hp"
-                                                class="w-full border-0 focus:outline-none focus:text-gray-600 focus:border-gray-200 focus:ring-gray-200 p-2"
-                                                placeholder="08xxxxxxxxxx" required />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Instansi/Perusahaan -->
-                                <div class="md:col-span-3">
-                                    <div>
-                                        <label
-                                            class="text-sm font-medium text-gray-600 block mb-2">Instansi/Perusahaan</label>
-                                        <div class="w-full inline-flex border border-gray-200">
-                                            <div class="w-12 pt-2 text-center bg-gray-100">
-                                                <i class="ti ti-building-skyscraper text-xl"></i>
-                                            </div>
-                                            <input type="text" name="instansi"
-                                                class="w-full border-0 focus:outline-none focus:text-gray-600 focus:border-gray-200 focus:ring-gray-200 p-2"
-                                                placeholder="Nama Instansi/Perusahaan" required />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="p-6 pt-0 flex justify-end text-gray-500">
-                                <button type="button" id="next1"
-                                    class="inline-flex items-center justify-center gap-2 py-2 px-6 rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-all duration-300">
-                                    Lanjut
-                                    <i class="ti ti-arrow-right text-xl"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- SLIDE 2: Data Konsultasi -->
-                        <div id="slide-2" class="slide hidden">
-                            <div class="grid md:grid-cols-5 grid-cols-1 gap-6 md:px-10 px-6 items-center">
-                                <div class="md:col-span-2">
-                                    <h2 class="font-semibold text-gray-700">
-                                        Data Konsultasi
-                                    </h2>
-                                </div>
-                                <!-- Loket -->
-                                <div class="md:col-span-3">
-                                    <label class="text-sm font-medium text-gray-600 block mb-2">Pilih Loket</label>
-                                    <div class="flex items-center border border-gray-300 rounded-md overflow-hidden">
-                                        <div class="w-12 flex items-center justify-center">
-                                            <i class="ti ti-building text-xl text-gray-900"></i>
-                                        </div>
-                                        <select id="loket_id" name="loket_id" required
-                                            class="tom-select flex-1 border-0 bg-white">
-                                            <option value="">
-                                                -- Pilih Loket --
-                                            </option>
-                                            <!-- @foreach ($lokets as $loket) -->
-                                            <!-- <option value="{{ $loket->id }}">{{ $loket->nama_loket }}</option> -->
-                                            <!-- @endforeach -->
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <!-- Komoditas -->
-                                <div class="md:col-span-3">
-                                    <label class="text-sm font-medium text-gray-600 block mb-2">Jenis Usaha /
-                                        Komoditas</label>
-                                    <div class="flex items-center border border-gray-300 rounded-md overflow-hidden">
-                                        <div class="w-12 flex items-center justify-center">
-                                            <i class="ti ti-package text-xl text-gray-900"></i>
-                                        </div>
-                                        <select id="komoditas_id" name="komoditas_id" required
-                                            class="tom-select flex-1 border-0 bg-white">
-                                            <option value="">
-                                                -- Pilih Komoditas --
-                                            </option>
-                                            <!-- @foreach ($komoditas as $item) -->
-                                            <!-- <option value="{{ $item->id }}">{{ $item->nama_komoditas }}</option> -->
-                                            <!-- @endforeach -->
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <!-- Jenis Layanan -->
-                                <div class="md:col-span-3">
-                                    <label class="text-sm font-medium text-gray-600 block mb-2">Jenis Layanan</label>
-                                    <div class="flex items-center border border-gray-300 rounded-md overflow-hidden">
-                                        <div class="w-12 flex items-center justify-center">
-                                            <i class="ti ti-briefcase text-xl text-gray-900"></i>
-                                        </div>
-                                        <select id="jenis_layanan_id" name="jenis_layanan_id" required
-                                            class="tom-select flex-1 border-0 bg-white">
-                                            <option value="">
-                                                -- Pilih Jenis Layanan --
-                                            </option>
-                                            <!-- @foreach ($jenisLayanan as $layanan) -->
-                                            <!-- <option value="{{ $layanan->id }}">{{ $layanan->nama_layanan }}</option> -->
-                                            <!-- @endforeach -->
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <!-- Petugas -->
-                                <div class="md:col-span-3">
-                                    <label class="text-sm font-medium text-gray-600 block mb-2">Petugas</label>
-                                    <div class="flex items-center border border-gray-300 rounded-md overflow-hidden">
-                                        <div class="w-12 flex items-center justify-center">
-                                            <i class="ti ti-users text-xl text-gray-900"></i>
-                                        </div>
-                                        <select id="petugas_id" name="petugas_id"
-                                            class="tom-select flex-1 border-0 bg-white">
-                                            <option value="">
-                                                -- Pilih Petugas --
-                                            </option>
-                                            <!-- @foreach ($petugas as $p) -->
-                                            <!-- <option value="{{ $p->id }}">{{ $p->nama_petugas }}</option> -->
-                                            <!-- @endforeach -->
-                                            <option value="manual" class="text-gray-400 italic">
-                                                Lainnya...
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <!-- Input manual -->
-                                    <input type="text" name="nama_petugas_manual" id="nama_petugas_manual"
-                                        placeholder="Masukkan nama petugas"
-                                        class="mt-3 hidden w-full rounded-md border border-gray-300 p-3 text-sm text-gray-800 shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none" />
-                                </div>
-                            </div>
-                            <div class="p-6 pt-0 flex justify-between text-gray-500">
-                                <button type="button" id="back2"
-                                    class="inline-flex items-center justify-center gap-2 py-2 px-6 rounded-md text-white bg-gray-400 hover:bg-gray-500 transition-all duration-300">
-                                    <i class="ti ti-arrow-left text-xl"></i>
-                                    Kembali
-                                </button>
-                                <button type="button" id="next2"
-                                    class="inline-flex items-center justify-center gap-2 py-2 px-6 rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-all duration-300">
-                                    Lanjut
-                                    <i class="ti ti-arrow-right text-xl"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- SLIDE 3: Change Password -->
-                        <div id="slide-3" class="slide hidden">
-                            <div class="grid md:grid-cols-5 grid-cols-1 gap-6 md:px-10 px-6 items-center">
-                                <div class="md:col-span-2">
-                                    <h2 class="font-semibold text-gray-700">
-                                        Change password
-                                    </h2>
-                                </div>
-                                <div class="md:col-span-3">
-                                    <div class="w-full inline-flex border border-gray-200">
-                                        <div class="pt-2 w-12 text-center bg-gray-100">
-                                            <i class="ti ti-lock text-xl"></i>
-                                        </div>
-                                        <input type="password" name="password"
-                                            class="w-full border-0 focus:outline-none focus:text-gray-600 focus:border-gray-200 focus:ring-gray-200 p-2"
-                                            placeholder="New" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="p-6 pt-0 flex justify-between text-gray-500">
-                                <button type="button" id="back3"
-                                    class="inline-flex items-center justify-center gap-2 py-2 px-6 rounded-md text-white bg-gray-400 hover:bg-gray-500 transition-all duration-300">
-                                    <i class="ti ti-arrow-left text-xl"></i>
-                                    Kembali
-                                </button>
-                                <button type="submit"
-                                    class="inline-flex items-center justify-center gap-2 py-2 px-6 rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-all duration-300">
-                                    <i class="ti ti-send text-xl"></i>
-                                    Kirim Permohonan
-                                </button>
-                            </div>
-                        </div>
+                    <!-- Nama -->
+                    <div>
+                        <label for="nama" class="block text-sm font-medium text-gray-700">Nama <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" name="nama" id="nama" value="{{ old('nama') }}" required
+                            class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
                     </div>
-                </form>
-            </div>
+
+                    <!-- Email -->
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email <span
+                                class="text-red-500">*</span></label>
+                        <input type="email" name="email" id="email" value="{{ old('email') }}" required
+                            class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+                    </div>
+
+                    <!-- No HP -->
+                    <div>
+                        <label for="no_hp" class="block text-sm font-medium text-gray-700">Nomor Handphone <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" name="no_hp" id="no_hp" value="{{ old('no_hp') }}" required
+                            class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+                    </div>
+
+                    <!-- Instansi -->
+                    <div>
+                        <label for="instansi" class="block text-sm font-medium text-gray-700">Instansi/Perusahaan <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" name="instansi" id="instansi" value="{{ old('instansi') }}" required
+                            class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+                    </div>
+
+                    <!-- Alamat -->
+                    <div>
+                        <label for="alamat" class="block text-sm font-medium text-gray-700">Alamat <span
+                                class="text-red-500">*</span></label>
+                        <textarea name="alamat" id="alamat" required rows="2"
+                            class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">{{ old('alamat') }}</textarea>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div id="step2" class="space-y-6 hidden">
+                    <h2 class="text-xl font-semibold text-gray-800">Detail Konsultasi</h2>
+
+                    <!-- Tanggal Konsultasi -->
+                    <div class="mb-6">
+                        <label for="tanggal_konsultasi" class="mb-2 block text-sm font-medium text-gray-700">
+                            Tanggal Konsultasi <span class="text-red-500">*</span>
+                        </label>
+                        <input type="date" name="tanggal_konsultasi" id="tanggal_konsultasi"
+                            value="{{ old('tanggal_konsultasi') }}"
+                            class="w-full rounded-md border border-gray-300 p-3 text-sm text-gray-800 shadow-sm
+                    focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none"
+                            required />
+                    </div>
+
+                    <!-- Perihal -->
+                    <div class="mb-6">
+                        <label for="perihal" class="mb-2 block text-sm font-medium text-gray-700">
+                            Perihal <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" name="perihal" id="perihal" value="{{ old('perihal') }}" required
+                            class="w-full rounded-md border border-gray-300 p-3 text-sm text-gray-800 shadow-sm
+                    focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none" />
+                    </div>
+
+                    <!-- Loket -->
+                    <div class="mb-6">
+                        <label for="loket_id" class="mb-2 block text-sm font-medium text-gray-700">
+                            Pilih Loket <span class="text-red-500">*</span>
+                        </label>
+                        <select name="loket_id" id="loket_id" required
+                            class="w-full rounded-md border border-gray-300 p-3 text-sm text-gray-800 shadow-sm
+                    focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                            <option value="">-- Pilih Loket --</option>
+                            @foreach ($lokets as $loket)
+                                <option value="{{ $loket->id }}">{{ $loket->nama_loket }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Komoditas -->
+                    <div class="mb-6">
+                        <label for="komoditas_id" class="mb-2 block text-sm font-medium text-gray-700">
+                            Jenis Usaha/Komoditas <span class="text-red-500">*</span>
+                        </label>
+                        <select name="komoditas_id" id="komoditas_id" required
+                            class="w-full rounded-md border border-gray-300 p-3 text-sm text-gray-800 shadow-sm
+                    focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                            <option value="">-- Pilih Komoditas --</option>
+                            @foreach ($komoditas as $item)
+                                <option value="{{ $item->id }}"
+                                    {{ old('komoditas_id') == $item->id ? 'selected' : '' }}>
+                                    {{ $item->nama_komoditas }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Jenis Layanan -->
+                    <div class="mb-6">
+                        <label for="jenis_layanan_id" class="mb-2 block text-sm font-medium text-gray-700">
+                            Jenis Layanan <span class="text-red-500">*</span>
+                        </label>
+                        <select name="jenis_layanan_id" id="jenis_layanan_id" required
+                            class="w-full rounded-md border border-gray-300 p-3 text-sm text-gray-800 shadow-sm
+                    focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                            <option value="">-- Pilih Jenis Layanan --</option>
+                            @foreach ($jenisLayanan as $layanan)
+                                <option value="{{ $layanan->id }}"
+                                    {{ old('jenis_layanan_id') == $layanan->id ? 'selected' : '' }}>
+                                    {{ $layanan->nama_layanan }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Petugas -->
+                    <div class="mb-6">
+                        <label for="petugas_id" class="mb-2 block text-sm font-medium text-gray-700">
+                            Petugas <span class="text-red-500">*</span>
+                        </label>
+
+                        <select name="petugas_id" id="petugas_id"
+                            class="w-full rounded-md border border-gray-300 p-3 text-sm text-gray-800 shadow-sm
+        focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                            <option value="">-- Pilih Petugas --</option>
+                            @foreach ($petugas as $p)
+                                <option value="{{ $p->id }}" {{ old('petugas_id') == $p->id ? 'selected' : '' }}>
+                                    {{ $p->nama_petugas }}
+                                </option>
+                            @endforeach
+                            <option value="manual" class="text-gray-400 italic" style="color:#9ca3af; font-style:italic;"
+                                {{ old('petugas_id') == 'manual' ? 'selected' : '' }}>
+                                Lainnya...
+                            </option>
+                        </select>
+
+                        <!-- Input manual hanya muncul kalau pilih "manual" -->
+                        <input type="text" name="nama_petugas_manual" id="nama_petugas_manual"
+                            placeholder="Masukkan nama petugas" value="{{ old('nama_petugas_manual') }}"
+                            class="mt-3 hidden w-full rounded-md border border-gray-300 p-3 text-sm text-gray-800 shadow-sm
+        focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none" />
+
+                        @error('petugas_id')
+                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+
+                <!-- Navigation Buttons -->
+                <div class="mt-8 flex justify-between">
+                    <button type="button" id="prevBtn"
+                        class="hidden rounded-md bg-gray-300 px-4 py-2 text-gray-700">Sebelumnya</button>
+                    <button type="button" id="nextBtn"
+                        class="rounded-md bg-indigo-600 px-4 py-2 text-white">Lanjut</button>
+                    <button type="submit" id="submitBtn"
+                        class="hidden rounded-md bg-green-600 px-4 py-2 text-white">Kirim</button>
+                </div>
+            </form>
         </div>
-    </section>
-
-    <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
-    <script>
-        // Wizard navigation
-        const slides = [
-            document.getElementById("slide-1"),
-            document.getElementById("slide-2"),
-            document.getElementById("slide-3"),
-        ];
-        let currentSlide = 0;
-
-        function showSlide(idx) {
-            slides.forEach((slide, i) => {
-                slide.classList.toggle("hidden", i !== idx);
-            });
-        }
-
-        document.getElementById("next1").onclick = function () {
-            showSlide(1);
-        };
-        document.getElementById("back2").onclick = function () {
-            showSlide(0);
-        };
-        document.getElementById("next2").onclick = function () {
-            showSlide(2);
-        };
-        document.getElementById("back3").onclick = function () {
-            showSlide(1);
-        };
-
-        // TomSelect
-        new TomSelect("#loket_id");
-        new TomSelect("#komoditas_id");
-        new TomSelect("#jenis_layanan_id");
-        new TomSelect("#petugas_id", {
-            onChange: function (value) {
-                const manualInput = document.getElementById(
-                    "nama_petugas_manual"
-                );
-                if (value === "manual") {
-                    manualInput.classList.remove("hidden");
-                } else {
-                    manualInput.classList.add("hidden");
-                    manualInput.value = "";
-                }
-            },
-        });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/@tabler/icons@1.74.0/icons-react/dist/index.umd.min.js"></script>
-</body>
-
-</html>
+    </div>
+@endsection

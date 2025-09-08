@@ -19,5 +19,53 @@
         body {
             font-family: "Inter", sans-serif;
         }
+
+         .ts-control,
+        .ts-control .item,
+        .ts-dropdown .option,
+        .tom-select,
+        .ts-control input,
+        select,
+        select option {
+            text-align: left !important;
+            justify-content: flex-start !important;
+        }
+
+        .ts-control {
+            display: flex !important;
+            justify-content: flex-start !important;
+            align-items: center !important;
+        }
+
+        .ts-control .item {
+            display: flex !important;
+            justify-content: flex-start !important;
+            align-items: center !important;
+            text-align: left !important;
+            width: 100% !important;
+            padding-left: 0 !important;
+        }
+
+        /* Tambahan agar placeholder TomSelect tidak center */
+        .ts-control .item[data-value=""] {
+            color: #9ca3af !important;
+            font-style: italic;
+            text-align: left !important;
+            justify-content: flex-start !important;
+            align-items: flex-start !important;
+            padding-left: 0 !important;
+        }
+
+        /* Paksa input TomSelect agar tidak center */
+        .ts-control input {
+            text-align: left !important;
+            padding-left: 0 !important;
+        }
+
+        /* Jika masih center, tambahkan ini */
+        .ts-control .items {
+            justify-content: flex-start !important;
+            text-align: left !important;
+        }
     </style>
 </head>
