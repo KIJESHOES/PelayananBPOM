@@ -8,8 +8,6 @@ use Filament\Tables\Table;
 use Filament\Tables;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Support\Facades\Mail;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Tables\Enums\RecordActionsPosition;
@@ -82,24 +80,40 @@ class KonsultasisTable
                         ->requiresConfirmation()
                         ->hidden(
                             fn($record) =>
-                            // Sembunyikan kalau status bukan pending
-                            $record->status !== 'pending'
-                            // atau sudah lewat 12 jam
-                            || \Carbon\Carbon::parse($record->tanggal_konsultasi)->addHours(12)->isPast()
+                            $record->status !== 'pending' ||
+                            \Carbon\Carbon::parse($record->tanggal_konsultasi)->addHours(12)->isPast()
                         )
                         ->action(function ($record) {
+
+                            // ambil semua admin
+                            $admins = \App\Models\User::where('is_admin', true)->get();
+
                             try {
-                                // ✅ Cek kalau sudah lewat 12 jam dan status masih pending
-                                if (
-                                    \Carbon\Carbon::parse($record->tanggal_konsultasi)->addHours(12)->isPast()
-                                    && $record->status === 'pending'
-                                ) {
+                                // cek 12 jam
+                                if (\Carbon\Carbon::parse($record->tanggal_konsultasi)->addHours(12)->isPast() && $record->status === 'pending') {
                                     $record->status = 'gagal';
                                     $record->save();
+
+                                    // notif database untuk semua admin
+                                    foreach ($admins as $admin) {
+                                        \Filament\Notifications\Notification::make()
+                                            ->title('Gagal mengirim PDF')
+                                            ->body('Konsultasi sudah lewat 12 jam, status otomatis gagal.')
+                                            ->danger()
+                                            ->sendToDatabase($admin);
+                                    }
+
+                                    // notif pop-up
+                                    \Filament\Notifications\Notification::make()
+                                        ->title('Gagal mengirim PDF')
+                                        ->body('Konsultasi sudah lewat 12 jam, status otomatis gagal.')
+                                        ->danger()
+                                        ->send();
+
                                     return;
                                 }
 
-                                // ✅ Kalau masih valid → generate PDF dan kirim email
+                                // generate PDF & kirim email
                                 $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.konsultasi', [
                                     'konsultasi' => $record,
                                 ])->output();
@@ -109,9 +123,42 @@ class KonsultasisTable
 
                                 $record->status = 'terkirim';
                                 $record->save();
+
+                                // notif sukses untuk semua admin
+                                foreach ($admins as $admin) {
+                                    \Filament\Notifications\Notification::make()
+                                        ->title('PDF berhasil dikirim')
+                                        ->body('Hasil konsultasi terkirim ke: ' . $record->email)
+                                        ->success()
+                                        ->sendToDatabase($admin);
+                                }
+
+                                // notif pop-up
+                                \Filament\Notifications\Notification::make()
+                                    ->title('PDF berhasil dikirim')
+                                    ->body('Hasil konsultasi terkirim ke: ' . $record->email)
+                                    ->success()
+                                    ->send();
+
                             } catch (\Exception $e) {
                                 $record->status = 'gagal';
                                 $record->save();
+
+                                // notif error untuk semua admin
+                                foreach ($admins as $admin) {
+                                    \Filament\Notifications\Notification::make()
+                                        ->title('Terjadi kesalahan')
+                                        ->body('PDF gagal dikirim: ' . $e->getMessage())
+                                        ->danger()
+                                        ->sendToDatabase($admin);
+                                }
+
+                                // notif pop-up
+                                \Filament\Notifications\Notification::make()
+                                    ->title('Terjadi kesalahan')
+                                    ->body('PDF gagal dikirim: ' . $e->getMessage())
+                                    ->danger()
+                                    ->send();
                             }
                         }),
 

@@ -8,7 +8,8 @@ use App\Models\JenisLayanan;
 use App\Models\Petugas;
 use App\Models\Konsultasi;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
+use App\Models\User;
+use App\Notifications\KonsultasiBaru;
 
 class KonsultasiController extends Controller
 {
@@ -38,12 +39,11 @@ class KonsultasiController extends Controller
             'tanggal_konsultasi' => 'required|date',
             'perihal' => 'required|string|max:255',
 
-            // Jangan pakai exists langsung, kita cek manual
             'petugas_id' => 'nullable',
             'nama_petugas_manual' => 'nullable|string|max:255',
         ]);
 
-        // --- Validasi custom: harus pilih salah satu ---
+        // Validasi custom
         if ($request->petugas_id === 'manual') {
             if (!$request->filled('nama_petugas_manual')) {
                 return back()
@@ -52,7 +52,6 @@ class KonsultasiController extends Controller
             }
             $validated['petugas_id'] = null;
         } elseif ($request->filled('petugas_id')) {
-            // cek validasi id petugas dari DB
             if (!\App\Models\Petugas::where('id', $request->petugas_id)->exists()) {
                 return back()
                     ->withErrors(['petugas_id' => 'Petugas yang dipilih tidak valid.'])
@@ -65,12 +64,19 @@ class KonsultasiController extends Controller
                 ->withInput();
         }
 
-        Konsultasi::create($validated + ['status' => 'pending']);
+        // simpan data
+        $konsultasi = Konsultasi::create($validated + ['status' => 'pending']);
+
+        // notif admin
+        $admins = User::where('is_admin', true)->get();
+        foreach ($admins as $admin) {
+            $admin->notifyNow(new \App\Notifications\KonsultasiBaru($konsultasi));
+        }
 
         return redirect()
-            ->route('konsultasi.create')
+            ->route('konsultasi.success')
             ->with('success', 'Formulir konsultasi berhasil dikirim!');
-
     }
+
 
 }

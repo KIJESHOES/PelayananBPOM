@@ -27,11 +27,13 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-           ->login()
+            ->login()
             ->brandLogo(asset('assets/img/logo-filament.png'))
             ->favicon(asset('assets/img/favicon.png'))
             ->brandLogoHeight('48px')
             ->brandName('Admin BPOM Bogor')
+            ->sidebarCollapsibleOnDesktop(true)
+            ->databaseNotifications()
             ->colors([
                 'primary' => Color::hex('#4ac4f3'),
                 'secondary' => Color::hex('#1aebd6'),

@@ -1,16 +1,10 @@
-<!-- Script Petugas -->
-<!-- Tambahkan Tom Select CDN -->
-<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@tabler/icons@1.74.0/icons-react/dist/index.umd.min.js"></script>
-
-
-    <script>
-        // Wizard navigation
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // ====== Wizard slides ======
         const slides = [
             document.getElementById("slide-1"),
             document.getElementById("slide-2"),
-            document.getElementById("slide-3"),
+            document.getElementById("slide-3")
         ];
         let currentSlide = 0;
 
@@ -20,221 +14,178 @@
             });
         }
 
-        document.getElementById("next1").onclick = function () {
-            showSlide(1);
-        };
-        document.getElementById("back2").onclick = function () {
-            showSlide(0);
-        };
-        document.getElementById("next2").onclick = function () {
-            showSlide(2);
-        };
-        document.getElementById("back3").onclick = function () {
-            showSlide(1);
-        };
+        // ====== Toggle input manual petugas ======
+        const selectPetugas = document.getElementById("petugas_id");
+        const inputManual = document.getElementById("nama_petugas_manual");
 
-        // TomSelect
-        new TomSelect("#loket_id");
-        new TomSelect("#komoditas_id");
-        new TomSelect("#jenis_layanan_id");
-        new TomSelect("#petugas_id", {
-            onChange: function (value) {
-                const manualInput = document.getElementById("nama_petugas_manual");
-                if (value === "manual") {
-                    manualInput.classList.remove("hidden");
-                } else {
-                    manualInput.classList.add("hidden");
-                    manualInput.value = "";
-                }
-            },
+        function toggleManual() {
+            if (selectPetugas.value === "manual") {
+                inputManual.classList.remove("hidden");
+                inputManual.required = true;
+            } else {
+                inputManual.classList.add("hidden");
+                inputManual.required = false;
+                inputManual.value = "";
+            }
+        }
+        selectPetugas.addEventListener("change", () => {
+            toggleManual();
+            validateSlide2();
         });
+        toggleManual();
 
-        // Simpan state: field mana yang sudah pernah disentuh
-        const touchedFields = new Set();
-
-        function validateSlide1() {
-            const slide = document.getElementById("slide-1");
-            const requiredInputs = slide.querySelectorAll("input[required], textarea[required]");
-            let valid = true;
-
-            requiredInputs.forEach((input) => {
-                const errorSpan = input.parentElement.querySelector("span[id^='error-']");
-                const isEmpty = !input.value.trim();
-
-                // Cek validasi untuk tombol lanjut
-                if (isEmpty) valid = false;
-
-                // Tampilkan error hanya kalau field sudah pernah disentuh
-                if (touchedFields.has(input) && errorSpan) {
-                    if (isEmpty) {
-                        errorSpan.classList.remove("hidden");
-                    } else {
-                        errorSpan.classList.add("hidden");
-                    }
-                }
-            });
-
-            document.getElementById("next1").disabled = !valid;
-        }
-
-        // Pasang event listener ke semua field
-        document
-            .querySelectorAll("#slide-1 input[required], #slide-1 textarea[required]")
-            .forEach((input) => {
-                // Saat user mengetik → validasi ulang
-                input.addEventListener("input", validateSlide1);
-
-                // Saat keluar dari field → tandai field sudah disentuh
-                input.addEventListener("blur", () => {
-                    touchedFields.add(input);
-                    validateSlide1();
-                });
-            });
-
-        // Jalankan validasi awal
-        validateSlide1();
-
-        // ✅ Cek apakah semua field terisi → kontrol tombol "Lanjut"
-        function validateSlide1ForButton() {
-            const slide = document.getElementById("slide-1");
-            const requiredInputs = slide.querySelectorAll("input[required], textarea[required]");
-            let allFilled = true;
-
-            requiredInputs.forEach((input) => {
-                if (!input.value.trim()) {
-                    allFilled = false;
-                }
-            });
-
-            document.getElementById("next1").disabled = !allFilled;
-        }
-
-        // ✅ Tampilkan error hanya saat tombol "Lanjut" diklik
-        function showErrorsSlide1() {
-            const slide = document.getElementById("slide-1");
-            const requiredInputs = slide.querySelectorAll("input[required], textarea[required]");
-
-            requiredInputs.forEach((input) => {
-                const errorSpan = document.getElementById("error-" + input.name);
-                if (errorSpan) {
-                    if (!input.value.trim()) {
-                        errorSpan.classList.remove("hidden"); // munculkan pesan
-                    } else {
-                        errorSpan.classList.add("hidden"); // sembunyikan kalau sudah isi
-                    }
-                }
-            });
-        }
-
-        // 🔹 Event listener untuk tombol
-        document.getElementById("next1").addEventListener("click", (e) => {
-            showErrorsSlide1();
-
-            // Cek lagi kalau masih ada field kosong → jangan pindah slide
-            const slide = document.getElementById("slide-1");
-            const requiredInputs = slide.querySelectorAll("input[required], textarea[required]");
-            let valid = true;
-
-            requiredInputs.forEach((input) => {
-                if (!input.value.trim()) {
-                    valid = false;
-                }
-            });
-
-            if (!valid) {
-                e.preventDefault(); // cegah lanjut ke slide berikutnya
+        // ====== Navigation buttons ======
+        document.getElementById("next1").addEventListener("click", function () {
+            if (validateSlide1()) {
+                currentSlide = 1;
+                showSlide(currentSlide);
             }
         });
-
-        // 🔹 Event listener untuk update tombol saat user ngetik
-        document.querySelectorAll("#slide-1 input[required], #slide-1 textarea[required]").forEach((input) => {
-            input.addEventListener("input", validateSlide1ForButton);
+        document.getElementById("back2").addEventListener("click", function () {
+            currentSlide = 0;
+            showSlide(currentSlide);
+        });
+        document.getElementById("next2").addEventListener("click", function () {
+            if (validateSlide2()) {
+                currentSlide = 2;
+                showSlide(currentSlide);
+            }
+        });
+        document.getElementById("back3").addEventListener("click", function () {
+            currentSlide = 1;
+            showSlide(currentSlide);
         });
 
-        // Jalankan validasi awal
-        validateSlide1ForButton();
-
-
-
-
-        function validateSlide2() {
-            const slide = document.getElementById("slide-2");
-            const requiredInputs = slide.querySelectorAll(
-                "input[required], select[required], textarea[required]"
-            );
+        // ====== VALIDASI SLIDE 1 ======
+        function validateSlide1() {
+            const slide = slides[0];
             let valid = true;
-            requiredInputs.forEach((input) => {
-                // Untuk select TomSelect, cek value dari TomSelect
+            slide.querySelectorAll("input[required], textarea[required]").forEach(input => {
+                if (!input.value.trim()) valid = false;
+            });
+            document.getElementById("next1").disabled = !valid;
+            return valid;
+        }
+        slides[0].querySelectorAll("input[required], textarea[required]").forEach(input => {
+            input.addEventListener("input", validateSlide1);
+        });
+        validateSlide1();
+
+        // ====== VALIDASI SLIDE 2 ======
+        function validateSlide2() {
+            const slide = slides[1];
+            let valid = true;
+            slide.querySelectorAll("input[required], select[required], textarea[required]").forEach(input => {
                 if (input.tagName === "SELECT") {
                     if (!input.value || input.value === "") valid = false;
                 } else {
                     if (!input.value.trim()) valid = false;
                 }
             });
-            // Jika pilih petugas manual, wajib isi input manual
-            const petugasSelect = document.getElementById("petugas_id");
-            const manualInput = document.getElementById("nama_petugas_manual");
-            if (petugasSelect && petugasSelect.value === "manual") {
-                if (!manualInput.value.trim()) valid = false;
-            }
+            if (selectPetugas.value === "manual" && !inputManual.value.trim()) valid = false;
             document.getElementById("next2").disabled = !valid;
+            return valid;
         }
-
-        // Event listener untuk semua input/select di slide 2
-        document
-            .querySelectorAll(
-                "#slide-2 input[required], #slide-2 select[required], #slide-2 textarea[required]"
-            )
-            .forEach((input) => {
-                input.addEventListener("input", validateSlide2);
-                input.addEventListener("change", validateSlide2);
-            });
-        // Event listener khusus input manual petugas
-        document
-            .getElementById("nama_petugas_manual")
-            .addEventListener("input", validateSlide2);
-
-        // Jalankan validasi awal
+        slides[1].querySelectorAll("input[required], select[required], textarea[required]").forEach(input => {
+            input.addEventListener("input", validateSlide2);
+            input.addEventListener("change", validateSlide2);
+        });
+        inputManual.addEventListener("input", validateSlide2);
         validateSlide2();
 
+        // ====== VALIDASI SLIDE 3 ======
+        const confirmCheck = document.getElementById("confirmCheck");
+        const submitBtn = document.getElementById("submitBtn");
         function validateSlide3() {
-            const check = document.getElementById("confirmCheck");
-            document.getElementById("submit").disabled = !check.checked;
+            submitBtn.disabled = !confirmCheck.checked;
         }
-        document
-            .getElementById("confirmCheck")
-            .addEventListener("change", validateSlide3);
+        confirmCheck.addEventListener("change", validateSlide3);
         validateSlide3();
 
-        const submitBtn = document.getElementById("submit");
-        const modal = document.getElementById("confirmModal");
-        const cancelBtn = document.getElementById("cancelBtn");
-        const confirmBtn = document.getElementById("confirmBtn");
+        // ====== Modal Konfirmasi ======
+        const form = document.getElementById('wizardForm');
+        const modal = document.getElementById('confirmModal');
+        const confirmBox = document.getElementById('confirmBox');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const confirmBtn = document.getElementById('confirmBtn');
 
-        // Sembunyikan modal saat halaman dimuat
-        modal.classList.add("hidden");
+        function openModal() {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
 
-        // Ketika tombol "Kirim" ditekan
-        submitBtn.addEventListener("click", () => {
-            // Hanya tampilkan modal jika tombol tidak disabled (checkbox sudah dicentang)
-            if (!submitBtn.disabled) {
-                modal.classList.remove("hidden");
-            }
+            modal.classList.remove('opacity-0');
+            modal.classList.add('opacity-100');
+
+            setTimeout(() => {
+                confirmBox.classList.remove('scale-95', 'opacity-0');
+                confirmBox.classList.add('scale-100', 'opacity-100');
+            }, 10);
+
+            document.body.classList.add('overflow-hidden');
+        }
+
+        function closeModal() {
+            confirmBox.classList.add('scale-95', 'opacity-0');
+            confirmBox.classList.remove('scale-100', 'opacity-100');
+
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0');
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                document.body.classList.remove('overflow-hidden');
+            }, 200);
+        }
+
+        // intercept submit
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            openModal();
         });
 
-        // Tombol Batal
-        cancelBtn.addEventListener("click", () => {
-            modal.classList.add("hidden");
+        cancelBtn.addEventListener('click', closeModal);
+
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) closeModal();
         });
 
-        // Tombol Konfirmasi
-        confirmBtn.addEventListener("click", () => {
-            modal.classList.add("hidden");
-            // Aksi submit form
-            document.querySelector("form").submit();
+        confirmBtn.addEventListener('click', () => {
+            closeModal();
+            form.submit(); // ini akan submit ke POST /konsultasi dengan CSRF
         });
 
-        console.log("confirmCheck =", document.getElementById("confirmCheck"));
-        console.log("submit =", document.getElementById("submit"));
 
-    </script>
+        // tampilkan slide pertama
+        showSlide(currentSlide);
+
+        function showSlide(idx) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle("hidden", i !== idx);
+
+                // Stepper circle
+                const stepCircle = document.getElementById(`step-${i + 1}`);
+                const stepLabel = document.getElementById(`label-${i + 1}`);
+
+                if (i < idx) {
+                    // Step sudah selesai
+                    stepCircle.classList.remove("border-gray-300", "text-gray-400");
+                    stepCircle.classList.add("border-emerald-500", "bg-emerald-500", "text-white");
+                    stepLabel.classList.add("text-emerald-600", "font-semibold");
+                } else if (i === idx) {
+                    // Step aktif
+                    stepCircle.classList.remove("border-gray-300", "text-gray-400", "bg-emerald-500", "text-white");
+                    stepCircle.classList.add("border-emerald-500", "text-emerald-600");
+                    stepLabel.classList.add("text-emerald-600", "font-semibold");
+                } else {
+                    // Step belum aktif
+                    stepCircle.classList.remove("border-emerald-500", "bg-emerald-500", "text-white", "text-emerald-600");
+                    stepCircle.classList.add("border-gray-300", "text-gray-400");
+                    stepLabel.classList.remove("text-emerald-600", "font-semibold");
+                    stepLabel.classList.add("text-gray-500");
+                }
+            });
+        }
+
+    });
+</script>
