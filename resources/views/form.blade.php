@@ -263,12 +263,25 @@
                                                 <input type="checkbox" id="confirmCheck"
                                                     class="form-checkbox h-5 w-5 text-emerald-600 rounded focus:ring-emerald-500"
                                                     required />
-                                                <span class="ml-2 text-gray-700">Saya sudah yakin dan siap dihubungi
-                                                    jika
-                                                    diperlukan</span>
+                                                <span class="ml-2 text-gray-700">Saya sudah yakin dan siap dihubungi jika diperlukan</span>
                                             </label>
                                         </div>
                                     </div>
+                                    <!-- 🖊️ Tanda Tangan Digital (hanya tampil di slide-3) -->
+                                    <div class="mt-6">
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Tanda Tangan:</label>
+                                        <canvas id="signature-pad" width="400" height="200"
+                                            class="border border-gray-300 rounded-md bg-white"></canvas>
+                                        <div class="mt-2 flex gap-3">
+                                            <button type="button" id="clear"
+                                                class="px-4 py-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300">
+                                                Hapus
+                                            </button>
+                                        </div>
+                                        <input type="hidden" name="ttd" id="ttdInput">
+                                    </div>
+                                </div>
+                            </div>
                                 </div>
                             </div>
                             <div class="p-6 md:p-10 pt-6 flex justify-between text-gray-500">
@@ -283,23 +296,17 @@
                                     Kirim
                                     <i class="ti ti-arrow-right text-xl"></i>
                                 </button>
-
-
                             </div>
                         </div>
                         <!-- end konfirmasi -->
                     </div>
-
                 </form>
-
             </div>
         </div>
     </section>
-
     <!-- Overlay -->
     <div id="confirmModal"
         class="fixed inset-0 z-50 hidden opacity-0 items-center justify-center bg-black/40 transition-opacity duration-200">
-
         <!-- Box -->
         <div id="confirmBox"
             class="bg-white rounded-2xl shadow-2xl p-6 max-w-sm w-full text-center transform transition-all duration-200 scale-95 opacity-0">
@@ -314,4 +321,23 @@
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+    <script>
+        const canvas = document.getElementById('signature-pad');
+        const signaturePad = new SignaturePad(canvas);
+        const ttdInput = document.getElementById('ttdInput');
+
+        // simpan base64 ke hidden input
+        document.getElementById("wizardForm").addEventListener("submit", function (e) {
+            if (!signaturePad.isEmpty()) {
+                ttdInput.value = signaturePad.toDataURL("image/png");
+            }
+        });
+
+        // tombol clear
+        document.getElementById("clear").addEventListener("click", () => {
+            signaturePad.clear();
+            ttdInput.value = "";
+        });
+    </script>
 @endsection
