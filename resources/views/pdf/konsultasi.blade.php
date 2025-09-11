@@ -93,8 +93,9 @@
                 <td class="colon">:</td>
                 <td>
                     {{
-                    \Carbon\Carbon::parse($konsultasi->tanggal_konsultasi)->translatedFormat('l,
-                    d-m-Y') }}
+                    \Carbon\Carbon::parse($konsultasi->tanggal_konsultasi)
+                        ->locale('id') // aktifkan locale indonesia
+                        ->translatedFormat('l, d-m-Y');}}
                 </td>
             </tr>
             <tr>
