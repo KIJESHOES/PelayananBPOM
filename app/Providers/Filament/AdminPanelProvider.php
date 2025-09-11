@@ -34,6 +34,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandName('Admin BPOM Bogor')
             ->sidebarCollapsibleOnDesktop(true)
             ->databaseNotifications()
+            ->globalSearch(false)
             ->colors([
                 'primary' => Color::hex('#4ac4f3'),
                 'secondary' => Color::hex('#1aebd6'),
