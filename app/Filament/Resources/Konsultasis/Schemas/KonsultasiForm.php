@@ -15,8 +15,7 @@ class KonsultasiForm
                 Forms\Components\TextInput::make('nama')->required(),
                 Forms\Components\TextInput::make('email')->email()->required(),
                 Forms\Components\TextInput::make('no_hp')->label('No. HP'),
-                Forms\Components\TextInput::make('instansi'),
-                Forms\Components\Textarea::make('alamat'),
+                Forms\Components\TextInput::make('instansi')->required(),
 
                 Forms\Components\Select::make('loket_id')
                     ->relationship('loket', 'nama_loket')
@@ -33,16 +32,17 @@ class KonsultasiForm
                     ->label('Jenis Layanan')
                     ->required(),
 
+                Forms\Components\DatePicker::make('tanggal_konsultasi')->required(),
+
                 Forms\Components\Select::make('petugas_id')
                     ->relationship('petugas', 'nama_petugas')
                     ->label('Petugas')
                     ->searchable()
                     ->required(),
 
-                Forms\Components\DatePicker::make('tanggal_konsultasi')->required(),
-                Forms\Components\TextInput::make('perihal'),
-                Forms\Components\Textarea::make('catatan_konsultasi'),
-                Forms\Components\Textarea::make('tindak_lanjut'),
+                Forms\Components\Textarea::make('alamat')->required(),
+                Forms\Components\Textarea::make('catatan_konsultasi')->required(),
+                Forms\Components\Textarea::make('tindak_lanjut')->required(),
             ]);
     }
 }

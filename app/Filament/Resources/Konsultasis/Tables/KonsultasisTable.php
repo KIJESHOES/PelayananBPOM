@@ -20,12 +20,6 @@ class KonsultasisTable
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('nama')->label('Nama')->searchable(),
-                Tables\Columns\TextColumn::make('email')->label('Email')->label('Email')
-                    ->label('Email')
-                    ->icon('heroicon-o-envelope')
-                    ->badge() // tampil dalam kotak (chip/badge)
-                    ->color('info') // warna biru
-                    ->limit(5),
 
                 Tables\Columns\TextColumn::make('tanggal_konsultasi')
                     ->label('Tanggal Konsultasi')
@@ -35,11 +29,26 @@ class KonsultasisTable
                 Tables\Columns\TextColumn::make('loket.nama_loket')->label('Loket')->limit(10)
                     ->wrap(),
 
-                Tables\Columns\TextColumn::make('komoditas.nama_komoditas')->label('Komoditas')->limit(10)
-                    ->wrap(),
-
                 Tables\Columns\TextColumn::make('jenisLayanan.nama_layanan')->label('Jenis Layanan')->limit(10)
                     ->wrap(),
+
+                Tables\Columns\TextColumn::make('petugas_nama')
+                    ->label('Petugas')
+                    ->getStateUsing(function ($record) {
+                        // jika ada petugas dari master, pakai nama dari relasi
+                        if ($record->petugas_id) {
+                            return $record->petugas->nama_petugas;
+                        }
+                        // jika petugas manual, pakai nama manual
+                        return $record->nama_petugas_manual ?? '-';
+                    }),
+
+                Tables\Columns\TextColumn::make('email')->label('Email')->label('Email')
+                    ->label('Email')
+                    ->icon('heroicon-o-envelope')
+                    ->badge() // tampil dalam kotak (chip/badge)
+                    ->color('info') // warna biru
+                    ->limit(5),
 
                 Tables\Columns\TextColumn::make('status')
                     ->label('Status')
@@ -55,17 +64,6 @@ class KonsultasisTable
                         'success' => fn($state) => $state === 'terkirim',
                         'danger' => fn($state) => $state === 'gagal',
                     ]),
-
-                Tables\Columns\TextColumn::make('petugas_nama')
-                    ->label('Petugas')
-                    ->getStateUsing(function ($record) {
-                        // jika ada petugas dari master, pakai nama dari relasi
-                        if ($record->petugas_id) {
-                            return $record->petugas->nama_petugas;
-                        }
-                        // jika petugas manual, pakai nama manual
-                        return $record->nama_petugas_manual ?? '-';
-                    }),
             ])
             ->filters([
                 //
@@ -161,7 +159,6 @@ class KonsultasisTable
                                     ->send();
                             }
                         }),
-
 
                     Action::make('downloadPdf')
                         ->label('Download PDF')
