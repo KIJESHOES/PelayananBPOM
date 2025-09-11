@@ -57,24 +57,19 @@
     </head>
 
     <body>
-        <!-- Kode Dokumen -->
-        <div class="font-9" style="text-align: right; margin-bottom: 4px">
-            POM-08.02/CFM-01/SOP-01/IK.130.02/F.02
-        </div>
-
         <!-- Header dengan logo -->
         <table class="no-border" style="margin-bottom: 10px">
             <tr>
                 <td style="width: 80px; text-align: left">
                     <img
-                        src="{{ public_path('assets/img/favicon.png') }}"
+                        src="{{public_path('assets/img/favicon.png') }}"
                         alt="Logo BPOM"
                         style="height: 70px"
                     />
                 </td>
                 <td style="text-align: center">
                     <div class="font-12" style="font-weight: bold">
-                        LOKA PENGAWAS OBAT DAN MAKANAN DI KABUPATEN BOGOR
+                        BALAI PENGAWAS OBAT DAN MAKANAN DI KABUPATEN BOGOR
                     </div>
                     <div class="font-12" style="font-weight: bold">
                         BIDANG INFORMASI DAN KOMUNIKASI
@@ -121,9 +116,14 @@
                 <td>{{ $konsultasi->no_hp }}</td>
             </tr>
             <tr>
-                <td class="label">Nama dan Alamat Perusahaan/Instansi</td>
+                <td class="label">Nama</td>
                 <td class="colon">:</td>
-                <td>{{ $konsultasi->instansi }} - {{ $konsultasi->alamat }}</td>
+                <td>{{ $konsultasi->instansi }}</td>
+            </tr>
+            <tr>
+                <td class="label">Alamat Perusahaan/Instansi</td>
+                <td class="colon">:</td>
+                <td>{{ $konsultasi->alamat }}</td>
             </tr>
             <tr>
                 <td class="label">Nama/Jenis Produk yang Dikonsultasikan</td>

@@ -8,32 +8,6 @@
         ];
         let currentSlide = 0;
 
-        function showSlide(idx) {
-            slides.forEach((slide, i) => {
-                slide.classList.toggle("hidden", i !== idx);
-            });
-        }
-
-        // ====== Toggle input manual petugas ======
-        const selectPetugas = document.getElementById("petugas_id");
-        const inputManual = document.getElementById("nama_petugas_manual");
-
-        function toggleManual() {
-            if (selectPetugas.value === "manual") {
-                inputManual.classList.remove("hidden");
-                inputManual.required = true;
-            } else {
-                inputManual.classList.add("hidden");
-                inputManual.required = false;
-                inputManual.value = "";
-            }
-        }
-        selectPetugas.addEventListener("change", () => {
-            toggleManual();
-            validateSlide2();
-        });
-        toggleManual();
-
         // ====== Navigation buttons ======
         document.getElementById("next1").addEventListener("click", function () {
             if (validateSlide1()) {
@@ -82,7 +56,6 @@
                     if (!input.value.trim()) valid = false;
                 }
             });
-            if (selectPetugas.value === "manual" && !inputManual.value.trim()) valid = false;
             document.getElementById("next2").disabled = !valid;
             return valid;
         }
@@ -90,7 +63,6 @@
             input.addEventListener("input", validateSlide2);
             input.addEventListener("change", validateSlide2);
         });
-        inputManual.addEventListener("input", validateSlide2);
         validateSlide2();
 
         // ====== VALIDASI SLIDE 3 ======
@@ -152,9 +124,8 @@
 
         confirmBtn.addEventListener('click', () => {
             closeModal();
-            form.submit(); // ini akan submit ke POST /konsultasi dengan CSRF
+            form.submit(); // submit ke POST /konsultasi dengan CSRF
         });
-
 
         // tampilkan slide pertama
         showSlide(currentSlide);
@@ -186,6 +157,5 @@
                 }
             });
         }
-
     });
 </script>

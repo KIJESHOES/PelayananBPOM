@@ -225,39 +225,6 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div x-data="{ showManual: {{ old('petugas_id') == 'manual' ? 'true' : 'false' }} }">
-                                        <label class="text-sm font-medium text-gray-600 block mb-2">Petugas</label>
-                                        <div class="flex items-center border border-gray-300 rounded-md overflow-hidden">
-                                            <div class="w-12 flex items-center justify-center">
-                                                <i class="ti ti-users text-xl text-gray-900"></i>
-                                            </div>
-                                            <select id="petugas_id" name="petugas_id"
-                                                class="flex-1 border-0 bg-white px-2 py-2 outline-none"
-                                                x-on:change="showManual = ($event.target.value === 'manual')">
-                                                <option value="">-- Pilih Petugas --</option>
-                                                @foreach ($petugas as $p)
-                                                    <option value="{{ $p->id }}"
-                                                        {{ old('petugas_id') == $p->id ? 'selected' : '' }}>
-                                                        {{ $p->nama_petugas }}
-                                                    </option>
-                                                @endforeach
-                                                <option value="manual" class="italic text-gray-400"
-                                                    {{ old('petugas_id') == 'manual' ? 'selected' : '' }}>
-                                                    Lainnya...
-                                                </option>
-                                            </select>
-                                        </div>
-
-                                        <!-- Input manual -->
-                                        <div x-show="showManual" x-transition class="mt-3">
-                                            <input type="text" name="nama_petugas_manual" id="nama_petugas_manual"
-                                                placeholder="Masukkan nama petugas"
-                                                class="w-full rounded-md border border-gray-300 p-3 text-sm text-gray-800 shadow-sm
-                                                       focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none"
-                                                value="{{ old('nama_petugas_manual') }}" />
-                                        </div>
-                                    </div>
-
                                 </div>
                             </div>
                             <div class="p-6 md:p-10 pt-6 flex justify-between text-gray-500">
