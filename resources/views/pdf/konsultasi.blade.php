@@ -117,32 +117,32 @@
                 <td>{{ $konsultasi->no_hp }}</td>
             </tr>
             <tr>
-                <td class="label">Nama</td>
+                <td class="label">Instansi/Perusahaan</td>
                 <td class="colon">:</td>
                 <td>{{ $konsultasi->instansi }}</td>
             </tr>
             <tr>
-                <td class="label">Alamat Perusahaan/Instansi</td>
+                <td class="label">Alamat</td>
                 <td class="colon">:</td>
                 <td>{{ $konsultasi->alamat }}</td>
             </tr>
             <tr>
-                <td class="label">Nama/Jenis Produk yang Dikonsultasikan</td>
+                <td class="label">Perihal</td>
                 <td class="colon">:</td>
-                <td>{{ $konsultasi->jenisLayanan->nama_layanan }}</td>
+                <td>{{ $konsultasi->perihal }}</td>
             </tr>
-            <tr>
-                <td class="label">Jenis Topik Konsultasi</td>
+             <tr>
+                <td class="label">Jenis Usaha/Komoditas</td>
                 <td class="colon">:</td>
                 <td>{{ $konsultasi->komoditas->nama_komoditas }}</td>
             </tr>
             <tr>
-                <td class="label">Topik Konsultasi</td>
+                <td class="label">Jenis Layanan</td>
                 <td class="colon">:</td>
-                <td>{{ $konsultasi->perihal }}</td>
+                <td>{{ $konsultasi->jenisLayanan->nama_layanan }}</td>
             </tr>
             <tr>
-                <td class="label">Hasil Konsultasi</td>
+                <td class="label">Catatan Konsultasi</td>
                 <td class="colon">:</td>
                 <td>{{ $konsultasi->catatan_konsultasi }}</td>
             </tr>
