@@ -37,6 +37,7 @@ return new class extends Migration
 
             // tindak lanjut oleh admin
             $table->text('tindak_lanjut')->nullable();
+            $table->string('signature')->nullable();
 
             $table->timestamps();
         });

@@ -7,7 +7,6 @@ use Filament\Forms\Components as Forms;                // field components (Text
 use Filament\Schemas\Components\Tabs;                  // Tabs container
 use Filament\Schemas\Components\Tabs\Tab;              // Tab item
 use Filament\Schemas\Components\Fieldset;              // Fieldset (label + container)
-use App\Models\Petugas;                                // Model Petugas for relationship and datalist
 
 class KonsultasiForm
 {

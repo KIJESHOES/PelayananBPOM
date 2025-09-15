@@ -9,7 +9,6 @@ use App\Models\Petugas;
 use App\Models\Konsultasi;
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Notifications\KonsultasiBaru;
 
 class KonsultasiController extends Controller
 {
@@ -62,6 +61,21 @@ class KonsultasiController extends Controller
             return back()
                 ->withErrors(['petugas_id' => 'Silakan pilih petugas atau isi nama manual.'])
                 ->withInput();
+        }
+
+        if ($request->filled('signature')) {
+            $image = str_replace('data:image/png;base64,', '', $request->signature);
+            $image = str_replace(' ', '+', $image);
+
+            $imageName = "ttd_" . time() . ".png";
+            $path = "tanda_tangan/{$imageName}";
+
+            \Illuminate\Support\Facades\Storage::disk('public')->put(
+                $path,
+                base64_decode($image)
+            );
+
+            $validated['signature'] = $path;
         }
 
         // simpan data

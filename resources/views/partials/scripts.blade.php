@@ -68,13 +68,79 @@
         // ====== VALIDASI SLIDE 3 ======
         const confirmCheck = document.getElementById("confirmCheck");
         const submitBtn = document.getElementById("submitBtn");
+        const signatureInput = document.getElementById("signatureInput");
+
         function validateSlide3() {
-            submitBtn.disabled = !confirmCheck.checked;
+            submitBtn.disabled = !(confirmCheck.checked && signatureInput.value);
         }
         confirmCheck.addEventListener("change", validateSlide3);
         validateSlide3();
 
-        // ====== Modal Konfirmasi ======
+        // ====== TTD (Canvas) ======
+        const canvas = document.getElementById("signatureCanvas");
+        const ctx = canvas.getContext("2d");
+        let drawing = false;
+
+        function resizeCanvas() {
+            const ratio = window.devicePixelRatio || 1;
+            ctx.setTransform(1, 0, 0, 1, 0, 0); // reset transform biar nggak numpuk
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            ctx.scale(ratio, ratio);
+        }
+        window.addEventListener("resize", resizeCanvas);
+        resizeCanvas();
+
+        canvas.addEventListener("mousedown", startDraw);
+        canvas.addEventListener("mouseup", endDraw);
+        canvas.addEventListener("mousemove", draw);
+        canvas.addEventListener("touchstart", startDraw);
+        canvas.addEventListener("touchend", endDraw);
+        canvas.addEventListener("touchmove", draw);
+
+        function startDraw(e) {
+            e.preventDefault();
+            drawing = true;
+            ctx.beginPath();
+            ctx.moveTo(getX(e), getY(e));
+        }
+        function endDraw(e) {
+            e.preventDefault();
+            if (drawing) {
+                drawing = false;
+                saveSignature();
+            }
+        }
+        function draw(e) {
+            e.preventDefault();
+            if (!drawing) return;
+            ctx.lineWidth = 2;
+            ctx.lineCap = "round";
+            ctx.strokeStyle = "#000";
+            ctx.lineTo(getX(e), getY(e));
+            ctx.stroke();
+        }
+        function getX(e) {
+            return e.type.includes("touch")
+                ? e.touches[0].clientX - canvas.getBoundingClientRect().left
+                : e.offsetX;
+        }
+        function getY(e) {
+            return e.type.includes("touch")
+                ? e.touches[0].clientY - canvas.getBoundingClientRect().top
+                : e.offsetY;
+        }
+        function saveSignature() {
+            signatureInput.value = canvas.toDataURL("image/png");
+            validateSlide3();
+        }
+        document.getElementById("clearSignature").addEventListener("click", () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            signatureInput.value = "";
+            validateSlide3();
+        });
+
+        // Modal Konfirmasi
         const form = document.getElementById('wizardForm');
         const modal = document.getElementById('confirmModal');
         const confirmBox = document.getElementById('confirmBox');
