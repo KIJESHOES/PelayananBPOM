@@ -19,8 +19,7 @@
                 <div class="flex items-center justify-between mb-8">
                     <!-- Step 1 -->
                     <div class="flex flex-col items-center w-full">
-                        <div id="step-1"
-                            class="flex items-center justify-center w-10 h-10 rounded-full border-2 font-bold
+                        <div id="step-1" class="flex items-center justify-center w-10 h-10 rounded-full border-2 font-bold
                        text-gray-400 border-gray-300">
                             1
                         </div>
@@ -29,8 +28,7 @@
 
                     <!-- Step 2 -->
                     <div class="flex flex-col items-center w-full">
-                        <div id="step-2"
-                            class="flex items-center justify-center w-10 h-10 rounded-full border-2 font-bold
+                        <div id="step-2" class="flex items-center justify-center w-10 h-10 rounded-full border-2 font-bold
                        text-gray-400 border-gray-300">
                             2
                         </div>
@@ -39,8 +37,7 @@
 
                     <!-- Step 3 -->
                     <div class="flex flex-col items-center w-full">
-                        <div id="step-3"
-                            class="flex items-center justify-center w-10 h-10 rounded-full border-2 font-bold
+                        <div id="step-3" class="flex items-center justify-center w-10 h-10 rounded-full border-2 font-bold
                        text-gray-400 border-gray-300">
                             3
                         </div>
@@ -106,8 +103,7 @@
                                             <div class="w-12 pt-2 text-center bg-gray-100">
                                                 <i class="ti ti-building-skyscraper text-xl"></i>
                                             </div>
-                                            <input type="text" name="instansi" id="instansi"
-                                                value="{{ old('instansi') }}"
+                                            <input type="text" name="instansi" id="instansi" value="{{ old('instansi') }}"
                                                 class="w-full border-0 focus:outline-none focus:text-gray-600 focus:border-gray-200 focus:ring-gray-200 p-2"
                                                 placeholder="Nama Instansi/Perusahaan" required />
                                             <span class="text-sm text-red-500 mt-1 hidden" id="error-instansi">Instansi
@@ -120,8 +116,10 @@
                                             <div class="w-12 pt-2 text-center bg-gray-100">
                                                 <i class="ti ti-map-pin text-xl"></i>
                                             </div>
-                                            <textarea id="alamat" name="alamat" rows="3" placeholder="Masukkan alamat lengkap"
-                                                class="flex-1 border-0 p-2 focus:outline-none focus:ring-0 resize-none" required>{{ old('alamat') }}</textarea>
+                                            <textarea id="alamat" name="alamat" rows="3"
+                                                placeholder="Masukkan alamat lengkap"
+                                                class="flex-1 border-0 p-2 focus:outline-none focus:ring-0 resize-none"
+                                                required>{{ old('alamat') }}</textarea>
 
                                             <span class="text-sm text-red-500 mt-1 hidden" id="error-alamat">Alamat
                                                 wajib diisi</span>
@@ -150,8 +148,7 @@
                                             <div class="w-12 pt-2 text-center bg-gray-100">
                                                 <i class="ti ti-notes text-xl"></i>
                                             </div>
-                                            <input type="text" name="perihal" id="perihal"
-                                                value="{{ old('perihal') }}"
+                                            <input type="text" name="perihal" id="perihal" value="{{ old('perihal') }}"
                                                 class="w-full border-0 focus:outline-none focus:text-gray-600 focus:border-gray-200 focus:ring-gray-200 p-2"
                                                 placeholder="Perihal" required />
                                             <span class="text-sm text-red-500 mt-1 hidden" id="error-perihal">Perihal
@@ -169,7 +166,7 @@
                                             </div>
                                             <input type="date" name="tanggal_konsultasi" id="tanggal_konsultasi"
                                                 value="{{ old('tanggal_konsultasi') }}"
-                                                class="flex-1 border-0 p-2 focus:outline-none focus:ring-0" required />
+                                                class="flex-1 border-0 p-2 focus:outline-none focus:ring-0" required/>
                                             <span class="text-sm text-red-500 mt-1 hidden"
                                                 id="error-tanggal_konsultasi">Tanggal wajib diisi</span>
 
@@ -250,24 +247,6 @@
                         <div id="slide-3" class="slide hidden">
                             <div class="md:px-10 px-6">
                                 <div class="space-y-5">
-
-                                    <!-- Canvas Tanda Tangan -->
-                                    <div class="mt-6">
-                                        <p class="text-gray-700 mb-2 font-semibold">Tanda Tangan</p>
-                                        <canvas id="signatureCanvas"
-                                            class="border border-gray-300 rounded-md w-full h-40 bg-white"></canvas>
-
-                                        <div class="flex gap-3 mt-3">
-                                            <button type="button" id="clearSignature"
-                                                class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
-                                                Hapus
-                                            </button>
-                                        </div>
-
-                                        <!-- Hidden input untuk dikirim ke backend -->
-                                        <input type="hidden" name="signature" id="signatureInput">
-                                    </div>
-
                                     <div
                                         class="flex items-start gap-3 bg-emerald-50 border border-emerald-200 rounded-lg p-4">
                                         <span class="mt-1 text-emerald-600">
@@ -288,6 +267,21 @@
                                             </label>
                                         </div>
                                     </div>
+                                    <!-- 🖊️ Tanda Tangan Digital (hanya tampil di slide-3) -->
+                                    <div class="mt-6">
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Tanda Tangan:</label>
+                                        <canvas id="signature-pad" width="400" height="200"
+                                            class="border border-gray-300 rounded-md bg-white"></canvas>
+                                        <div class="mt-2 flex gap-3">
+                                            <button type="button" id="clear"
+                                                class="px-4 py-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300">
+                                                Hapus
+                                            </button>
+                                        </div>
+                                        <input type="hidden" name="ttd" id="ttdInput">
+                                    </div>
+                                </div>
+                            </div>
                                 </div>
                             </div>
                             <div class="p-6 md:p-10 pt-6 flex justify-between text-gray-500">
@@ -296,8 +290,7 @@
                                     <i class="ti ti-arrow-left text-xl"></i>
                                     Kembali
                                 </button>
-                                <button type="submit" id="submitBtn" disabled
-                                    class="inline-flex items-center justify-center gap-2 py-2 px-6 rounded-md text-white
+                                <button type="submit" id="submitBtn" disabled class="inline-flex items-center justify-center gap-2 py-2 px-6 rounded-md text-white
                                    bg-emerald-500 hover:bg-emerald-600 transition-all duration-300
                                    disabled:opacity-50 disabled:cursor-not-allowed">
                                     Kirim
