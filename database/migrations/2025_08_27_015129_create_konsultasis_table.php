@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('no_hp')->nullable();
             $table->string('instansi')->nullable();
+            $table->string('tandatangan')->nullable();
             $table->text('alamat')->nullable();
 
             // relasi ke tabel master
