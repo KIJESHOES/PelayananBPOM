@@ -52,7 +52,6 @@ class PetugasTable
                     ->size('sm')
                     ->color('gray'),
             ])
-            ->recordActionsPosition(RecordActionsPosition::BeforeColumns)
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),

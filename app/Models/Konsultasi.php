@@ -26,6 +26,7 @@ class Konsultasi extends Model
         'catatan_konsultasi',
         'tindak_lanjut',
         'status',
+        'signature',
     ];
 
     protected static function booted()
