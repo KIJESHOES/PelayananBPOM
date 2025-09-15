@@ -307,7 +307,7 @@
                                     <i class="ti ti-arrow-right text-xl"></i>
                                 </button>
 
-
+remmove error
                             </div>
                         </div>
                         <!-- end konfirmasi -->
