@@ -69,10 +69,37 @@
         const confirmCheck = document.getElementById("confirmCheck");
         const submitBtn = document.getElementById("submitBtn");
         function validateSlide3() {
+            // tombol submit aktif hanya jika checkbox dicentang
             submitBtn.disabled = !confirmCheck.checked;
         }
         confirmCheck.addEventListener("change", validateSlide3);
         validateSlide3();
+
+        // SignaturePad
+        const canvas = document.getElementById('signature-pad');
+        const signaturePad = new SignaturePad(canvas);
+        const ttdInput = document.getElementById('signature'); // hidden input
+
+        // Clear signature
+        document.getElementById("clear").addEventListener("click", () => {
+            signaturePad.clear();
+            ttdInput.value = "";
+            validateSlide3();
+        });
+
+        // Validasi slide 3
+        function validateSlide3() {
+            const submitBtn = document.getElementById('submitBtn');
+            // aktif jika checkbox dicentang dan signature tidak kosong
+            submitBtn.disabled = !(confirmCheck.checked && !signaturePad.isEmpty());
+        }
+
+        // Checkbox listener
+        confirmCheck.addEventListener("change", validateSlide3);
+
+        // Canvas listener (agar tombol submit aktif saat baru gambar)
+        canvas.addEventListener("mouseup", validateSlide3);
+        canvas.addEventListener("touchend", validateSlide3);
 
         // ====== Modal Konfirmasi ======
         const form = document.getElementById('wizardForm');
@@ -110,9 +137,27 @@
             }, 200);
         }
 
-        // intercept submit
+        // intercept submit untuk modal
         form.addEventListener('submit', function (e) {
             e.preventDefault();
+
+            // masukkan signature ke hidden input sebelum modal
+            if (!signaturePad.isEmpty()) {
+                // Buat canvas sementara untuk resize (misal 150x80px)
+                const resizeCanvas = document.createElement('canvas');
+                resizeCanvas.width = 150;   // lebar TTD di PDF
+                resizeCanvas.height = 80;   // tinggi TTD di PDF
+                const ctx = resizeCanvas.getContext('2d');
+
+                // gambar dari canvas asli ke canvas kecil
+                ctx.fillStyle = "#fff"; // isi background putih
+                ctx.fillRect(0, 0, resizeCanvas.width, resizeCanvas.height);
+                ctx.drawImage(canvas, 0, 0, resizeCanvas.width, resizeCanvas.height);
+
+                // simpan base64 ke hidden input
+                ttdInput.value = resizeCanvas.toDataURL('image/png');
+            }
+
             openModal();
         });
 
@@ -124,7 +169,9 @@
 
         confirmBtn.addEventListener('click', () => {
             closeModal();
-            form.submit(); // submit ke POST /konsultasi dengan CSRF
+            // submit form asli tanpa memicu e.preventDefault lagi
+            form.removeEventListener('submit', arguments.callee); // hapus listener lama
+            form.submit();
         });
 
         // tampilkan slide pertama
@@ -139,17 +186,14 @@
                 const stepLabel = document.getElementById(`label-${i + 1}`);
 
                 if (i < idx) {
-                    // Step sudah selesai
                     stepCircle.classList.remove("border-gray-300", "text-gray-400");
                     stepCircle.classList.add("border-emerald-500", "bg-emerald-500", "text-white");
                     stepLabel.classList.add("text-emerald-600", "font-semibold");
                 } else if (i === idx) {
-                    // Step aktif
                     stepCircle.classList.remove("border-gray-300", "text-gray-400", "bg-emerald-500", "text-white");
                     stepCircle.classList.add("border-emerald-500", "text-emerald-600");
                     stepLabel.classList.add("text-emerald-600", "font-semibold");
                 } else {
-                    // Step belum aktif
                     stepCircle.classList.remove("border-emerald-500", "bg-emerald-500", "text-white", "text-emerald-600");
                     stepCircle.classList.add("border-gray-300", "text-gray-400");
                     stepLabel.classList.remove("text-emerald-600", "font-semibold");

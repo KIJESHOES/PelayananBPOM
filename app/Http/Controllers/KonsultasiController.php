@@ -39,29 +39,9 @@ class KonsultasiController extends Controller
             'perihal' => 'required|string|max:255',
 
             'petugas_id' => 'nullable',
-            'nama_petugas_manual' => 'nullable|string|max:255',
-        ]);
 
-        // Validasi custom
-        if ($request->petugas_id === 'manual') {
-            if (!$request->filled('nama_petugas_manual')) {
-                return back()
-                    ->withErrors(['nama_petugas_manual' => 'Silakan isi nama petugas manual.'])
-                    ->withInput();
-            }
-            $validated['petugas_id'] = null;
-        } elseif ($request->filled('petugas_id')) {
-            if (!\App\Models\Petugas::where('id', $request->petugas_id)->exists()) {
-                return back()
-                    ->withErrors(['petugas_id' => 'Petugas yang dipilih tidak valid.'])
-                    ->withInput();
-            }
-            $validated['nama_petugas_manual'] = null;
-        } else {
-            return back()
-                ->withErrors(['petugas_id' => 'Silakan pilih petugas atau isi nama manual.'])
-                ->withInput();
-        }
+            
+        ]);
 
         if ($request->filled('signature')) {
             $image = str_replace('data:image/png;base64,', '', $request->signature);

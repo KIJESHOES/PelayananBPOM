@@ -156,9 +156,17 @@
         <!-- Tanda Tangan -->
         <table class="sign-table" style="width: 100%">
             <tr>
-                <td>
-                    Perusahaan/Instansi<br /><br /><br /><br /><br />
-                    (...........................................)
+                <td style="text-align: center; vertical-align: top;">
+                    Perusahaan/Instansi<br /><br /><br />
+
+                    @if($konsultasi->signature)
+                        <!-- Tampilkan TTD -->
+                        <img src="{{ public_path($konsultasi->signature) }}"
+                            style="width: 150px; height: auto; display: block; margin: 0 auto;">
+                            <strong>{{ $konsultasi->nama }}</strong>
+                    @else
+                        (...........................................)
+                    @endif
                 </td>
                 <td>
                     Petugas Konsultasi<br /><br /><br /><br /><br />
