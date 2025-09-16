@@ -267,6 +267,7 @@
                                             </label>
                                         </div>
                                     </div>
+
                                     <!-- 🖊️ Tanda Tangan Digital (hanya tampil di slide-3) -->
                                     <div class="mt-6">
                                         <label class="block text-sm font-medium text-gray-700 mb-2">Tanda Tangan:</label>
@@ -282,8 +283,6 @@
                                     </div>
                                 </div>
                             </div>
-                                </div>
-                            </div>
                             <div class="p-6 md:p-10 pt-6 flex justify-between text-gray-500">
                                 <button type="button" id="back3"
                                     class="inline-flex items-center justify-center gap-2 py-2 px-6 rounded-md text-white bg-gray-400 hover:bg-gray-500 transition-all duration-300">
@@ -296,8 +295,6 @@
                                     Kirim
                                     <i class="ti ti-arrow-right text-xl"></i>
                                 </button>
-
-
                             </div>
                         </div>
                         <!-- end konfirmasi -->
