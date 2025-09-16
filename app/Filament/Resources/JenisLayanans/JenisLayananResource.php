@@ -19,7 +19,7 @@ class JenisLayananResource extends Resource
 {
     protected static ?string $model = JenisLayanan::class;
 
-    protected static string|\UnitEnum|null $navigationGroup = NavigationGroup::Layanan;
+    protected static string|\UnitEnum|null $navigationGroup = NavigationGroup::MasterData;
 
     protected static ?int $navigationSort = 2;
 

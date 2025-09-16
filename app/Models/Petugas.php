@@ -15,11 +15,11 @@ class Petugas extends Model
     ];
 
     // Accessor untuk tanda tangan aktif
-    protected $appends = ['tanda_tangan_aktif'];
-
-    public function getTandaTanganAktifAttribute()
+    public function getTandaTanganUrlAttribute()
     {
-        return $this->tanda_tangan_upload;
+        return $this->tanda_tangan_upload
+            ? asset('storage/' . $this->tanda_tangan_upload)
+            : null;
     }
 
     public function konsultasis()

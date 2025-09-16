@@ -19,7 +19,7 @@ class LoketResource extends Resource
 {
     protected static ?string $model = Loket::class;
 
-    protected static string|\UnitEnum|null $navigationGroup = NavigationGroup::Layanan;
+    protected static string|\UnitEnum|null $navigationGroup = NavigationGroup::MasterData;
 
     protected static ?int $navigationSort = 3;
 
@@ -48,17 +48,17 @@ class LoketResource extends Resource
 
     public static function getPluralLabel(): string
     {
-        return 'Loket'; // 👈 ini buat judul halaman list
+        return 'Loket';
     }
 
     public static function getNavigationBadge(): ?string
     {
-        return (string) Loket::count(); // total semua petugas
+        return (string) Loket::count();
     }
 
     public static function getNavigationBadgeColor(): ?string
     {
-        return 'info'; // warna biru, bisa: primary, success, warning, danger, info
+        return 'info';
     }
 
     public static function getPages(): array

@@ -5,12 +5,16 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Petugas;
 use App\Http\Controllers\KonsultasiController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-*/
 
+Route::get('/tanda-tangan/{filename}', function ($filename) {
+    $path = storage_path('app/private/tanda_tangan/' . $filename);
+
+    if (!file_exists($path)) {
+        abort(404);
+    }
+
+    return response()->file($path);
+})->name('tanda-tangan.show');
 // Form konsultasi
 Route::get('/', [KonsultasiController::class, 'create'])->name('home');
 

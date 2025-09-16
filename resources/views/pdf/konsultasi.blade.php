@@ -157,12 +157,11 @@
         <table class="sign-table" style="width: 100%">
             <tr>
                 <td style="text-align: center; vertical-align: top;">
-                    Perusahaan/Instansi<br /><br /><br />
-
+                    <div>{{ $konsultasi->instansi }}</div>
                     @if($konsultasi->signature)
                         <div style="text-align: center;">
                             <img src="{{ storage_path('app/public/' . $konsultasi->signature) }}"
-                                style="width: 150px; height: auto; display: block; margin: 0 auto; margin-bottom: 5px;">
+                                style="height: 100px; display: block; margin: 0 auto;">
                             <div><strong>{{ $konsultasi->nama }}</strong></div>
                         </div>
                     @else
@@ -172,10 +171,24 @@
                         </div>
                     @endif
                 </td>
-                <td>
-                    Petugas Konsultasi<br /><br /><br /><br /><br />
-                    (...........................................)
-                </td>
+                <td style="text-align: center; vertical-align: top;">
+                    Petugas Balai POM di Bogor
+                    @php
+                    $petugas = $konsultasi->petugas; // relasi konsultasi → petugas
+                    @endphp
+                    @if($petugas && $petugas->tanda_tangan_upload)
+                        <div style="text-align: center;">
+                        <img src="{{ storage_path('app/public/' . $petugas->tanda_tangan_upload) }}"
+                            style="height: 100px; display: block; margin: 0 auto;">
+                        <div><strong>{{ $petugas->nama_petugas }}</strong></div>
+                        </div>
+                    @else
+                        <div style="text-align: center;">
+                            (...........................................) <br>
+                            <strong>{{ $petugas?->nama_petugas }}</strong>
+                        </div>
+                    @endif
+                </td>
             </tr>
         </table>
     </body>
