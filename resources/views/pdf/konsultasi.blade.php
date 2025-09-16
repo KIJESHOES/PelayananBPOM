@@ -160,10 +160,9 @@
                     Perusahaan/Instansi<br /><br /><br />
 
                     @if($konsultasi->signature)
-                        <!-- Tampilkan TTD -->
-                        <img src="{{ public_path($konsultasi->signature) }}"
+                        <img src="{{ storage_path('app/public/' . $konsultasi->signature) }}"
                             style="width: 150px; height: auto; display: block; margin: 0 auto;">
-                            <strong>{{ $konsultasi->nama }}</strong>
+                        <strong>{{ $konsultasi->nama }}</strong>
                     @else
                         (...........................................)
                     @endif

@@ -37,10 +37,8 @@ class KonsultasiController extends Controller
             'jenis_layanan_id' => 'required|exists:jenis_layanans,id',
             'tanggal_konsultasi' => 'required|date',
             'perihal' => 'required|string|max:255',
-
             'petugas_id' => 'nullable',
 
-            
         ]);
 
         if ($request->filled('signature')) {
@@ -54,7 +52,6 @@ class KonsultasiController extends Controller
                 $path,
                 base64_decode($image)
             );
-
             $validated['signature'] = $path;
         }
 
